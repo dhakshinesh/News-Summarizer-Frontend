@@ -1,0 +1,99 @@
+:root{
+  --bg: #0f1720;
+  --card: rgba(255,255,255,0.04);
+  --muted: #9aa6b2;
+  --accent: linear-gradient(135deg,#387373,#93BFB7);
+  --danger: #ff5b6e;
+  --primary: #2f855a;
+  --radius: 12px;
+  --text: #e6eef0;
+}
+
+* { box-sizing: border-box; }
+html,body { height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#06121a 0%, #071827 100%); color:var(--text); }
+
+#regChart {
+  width: 100%;
+  height: 300px;  /* FIXES Y-AXIS STRETCHING */
+}
+
+
+.admin-shell {
+  display: flex;
+  height: 100vh; /* full height */
+  overflow: hidden; /* prevent whole page scroll */
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: rgba(6,18,26,0.8);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,0.03);
+
+  height: 100vh;       /* full height */
+  overflow-y: auto;    /* scroll only inside sidebar */
+  position: relative;  /* DO NOT use sticky here */
+}
+
+.brand { font-size:1.2rem; font-weight:800; margin-bottom: 18px; color: var(--text); }
+.sidebar nav { display:flex; flex-direction:column; gap:8px; flex:1; }
+.nav-btn { background: transparent; border: none; text-align:left; padding:10px 12px; color:var(--muted); border-radius:8px; cursor:pointer; }
+.nav-btn.active, .nav-btn:hover { background: rgba(255,255,255,0.03); color:var(--text); }
+.spacer { flex:1; }
+.danger { background: transparent; color: var(--danger); border: none; padding:12px; cursor:pointer; }
+
+/* Main content */
+.main {
+  flex: 1;
+  padding: 28px;
+  overflow-y: auto;   /* THIS is the scroll */
+  height: 100vh;      /* match the sidebar */
+}
+.card { background: var(--card); border-radius: var(--radius); padding: 28px; max-width:720px; margin: 40px auto; text-align:center; }
+.center { display:flex; flex-direction:column; gap:12px; align-items:center; justify-content:center; }
+
+.form { width:100%; max-width:420px; display:flex; flex-direction:column; gap:12px; }
+.form label { display:flex; flex-direction:column; text-align:left; font-size:0.9rem; color:var(--muted); }
+.form input, .form select { padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color:var(--text); }
+
+.row { display:flex; justify-content:center; gap:12px; margin-top:6px; }
+
+button.primary { background: var(--primary); color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; }
+button.secondary { background:transparent; color:var(--text); border:1px solid rgba(255,255,255,0.04); padding:8px 12px; border-radius:8px; cursor:pointer; }
+button.danger { background:var(--danger); color:white; border:none; padding:8px; border-radius:8px; cursor:pointer; }
+
+/* Panels */
+.panel { max-width:1180px; margin:8px auto; }
+.panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.muted { color:var(--muted); font-size:0.95rem; }
+
+/* Stat cards */
+.cards-grid { display:flex; gap:12px; margin-bottom:18px; }
+.stat-card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px; border-radius:12px; flex:1; min-width:140px; }
+.stat-card h3 { margin:0; font-size:1.4rem; }
+
+/* Lists */
+.list { background: var(--card); border-radius:12px; padding:12px; }
+.user-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px; border-bottom:1px dashed rgba(255,255,255,0.02); }
+.user-meta { display:flex; gap:12px; align-items:center; }
+.user-actions button { margin-left:8px; }
+
+/* Activity & stats */
+.panel-section { background: var(--card); border-radius:12px; padding:12px; }
+.activity-item { padding:12px; border-radius:8px; background: rgba(0,0,0,0.15); margin-bottom:8px; }
+
+/* Pagination */
+.pagination { display:flex; gap:10px; align-items:center; margin-top:12px; }
+
+.hidden { display:none; }
+
+/* small screens */
+@media (max-width:880px) {
+  .admin-shell { flex-direction:column; }
+  .sidebar { width:100%; flex-direction:row; overflow:auto; gap:8px; padding:12px; }
+  .main { padding:12px; }
+  .cards-grid { flex-direction:column; }
+}

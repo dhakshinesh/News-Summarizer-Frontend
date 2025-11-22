@@ -137,8 +137,6 @@ nav button.active i {
 }
 
 
-
-
 #logoutBtn {
   background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
   color: white;
@@ -1218,4 +1216,71 @@ button[type="submit"],
 a {
     color: white;
     text-decoration: none !important;
+}
+
+#suspendedSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 40px 20px;
+    margin-top: 40px;
+
+    background: #f8d7da; /* Soft red warning background */
+    border: 1px solid #f5c2c7;
+    border-radius: 12px;
+
+    max-width: 600px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+#suspendedSection h2 {
+    color: #842029; /* Dark red heading */
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+#suspendMessage {
+    color: #58151c; 
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+#suspendedSection .logoutbtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+
+    background: #842029;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    transition: 0.2s ease-in-out;
+}
+
+#suspendedSection .logoutbtn:hover {
+    background: #a03542;
+}
+
+#suspendedSection .logoutbtn i {
+    font-size: 18px;
+}
+
+/* Smooth fade animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }

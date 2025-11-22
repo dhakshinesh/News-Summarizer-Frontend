@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Panel — News Summarizer</title>
+  <link rel="stylesheet" href="adminStyle.css" />
+</head>
+<body>
+  <div class="admin-shell">
+    <aside id="sideMenu" class="sidebar">
+      <div class="brand">News Admin</div>
+      <nav>
+        <button id="nav-dashboard" class="nav-btn active">Dashboard</button>
+        <button id="nav-users" class="nav-btn">Users</button>
+        <button id="nav-stats" class="nav-btn">Registrations</button>
+        <button id="nav-activity" class="nav-btn">User Activity</button>
+        <div class="spacer"></div>
+        <button id="adminLogout" class="danger">Logout</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <!-- LOGIN PANEL (shown only if not verified) -->
+      <section id="loginSection" class="card center">
+        <h2>Admin Login</h2>
+        <form id="adminLoginForm" class="form">
+          <label>Username
+            <input id="adminUsername" autocomplete="username" required />
+          </label>
+          <label>Password
+            <input id="adminPassword" type="password" autocomplete="current-password" required />
+          </label>
+          <div class="row">
+            <button id="adminLoginBtn" type="submit" class="primary">Sign in</button>
+          </div>
+          <div id="loginMessage" class="muted"></div>
+        </form>
+      </section>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="panel hidden">
+        <div class="panel-head">
+          <h1>Dashboard</h1>
+          <div id="dashboardInfo" class="muted">Quick admin overview</div>
+        </div>
+
+        <div class="cards-grid">
+          <div class="stat-card">
+            <h3 id="statTotalUsers">—</h3>
+            <p>Total users</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="statActiveUsers">—</h3>
+            <p>Active users</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="statNewUsers">—</h3>
+            <p>New (30 days)</p>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h3>Recent Activities</h3>
+          <div id="recentActivities">Loading...</div>
+        </div>
+      </section>
+
+      <!-- USERS -->
+      <section id="users" class="panel hidden">
+        <div class="panel-head">
+          <h1>Users</h1>
+          <div class="controls">
+            <input id="userSearch" placeholder="Search username..." />
+            <select id="statusFilter">
+              <option value="">All statuses</option>
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+              <option value="deleted">Deleted</option>
+            </select>
+            <button id="fetchUsersBtn" class="secondary">Refresh</button>
+          </div>
+        </div>
+
+        <div id="usersList" class="list">Loading users...</div>
+
+        <div class="pagination">
+          <button id="usersPrev">Prev</button>
+          <span id="usersPage">1</span> / <span id="usersTotalPages">1</span>
+          <button id="usersNext">Next</button>
+        </div>
+      </section>
+
+      <!-- USER ACTIVITY VIEW -->
+      <section id="userActivity" class="panel hidden">
+        <div class="panel-head">
+          <h1>User Activity</h1>
+          <div class="controls">
+            <input id="activityUsername" placeholder="Enter username to view" />
+            <button id="viewActivityBtn" class="secondary">View</button>
+          </div>
+        </div>
+        <div id="activityResult">Enter a username and click View</div>
+      </section>
+
+      <!-- REGISTRATION STATS -->
+      <section id="stats" class="panel hidden">
+        <div class="panel-head">
+          <h1>Registration Stats</h1>
+          <div class="controls">
+            <label>Days <input id="statsDays" type="number" min="7" value="30" /></label>
+            <button id="fetchStats" class="secondary">Fetch</button>
+          </div>
+        </div>
+        <div id="statsContainer">Loading stats...</div>
+      </section>
+    </main>
+  </div>
+
+  <script src="admin.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

@@ -47,10 +47,24 @@
 
       </nav>
 
+      <nav id="authSectionNav">
+        <button id="redirectToAdmin">
+            <i class="bi bi-shield-lock"></i><span>Go to Admin</span>
+        </button>
+      </nav>
+
     </div>
   </header>
 
   <main id="app">
+    <!--Suspended Section-->
+    <section id="suspendedSection" class="hidden">
+        <h2>Account Suspended</h2>
+        <p id="suspendMessage">You are suspended until further notice.</p>
+        <button class="logoutbtn" id="suspendedLogoutBtn">
+          <i class="bi bi-box-arrow-right"></i><span>Logout</span>
+        </button>
+    </section>
     <!-- Auth Section -->
     <section id="authSection">
       <h2>

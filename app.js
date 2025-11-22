@@ -6,16 +6,24 @@ const newsSection = document.getElementById("newsSection");
 const profileSection = document.getElementById("profileSection");
 const activitySection = document.getElementById("activitySection");
 const bookmarksSection = document.getElementById("bookmarksSection");
+const suspendedSection = document.getElementById("suspendedSection");
 
 const homeBtn = document.getElementById("homeBtn");
 const profileBtn = document.getElementById("profileBtn");
 const bookmarksBtn = document.getElementById("bookmarksBtn");
 const logoutBtn = document.getElementById("logoutBtn");
+const suspendedLogoutBtn = document.getElementById("suspendedLogoutBtn");
 
 function showSection(section) {
-  [authSection, newsSection, profileSection, activitySection, bookmarksSection].forEach(s => s.classList.add("hidden"));
+  [authSection, newsSection, profileSection, activitySection, bookmarksSection, suspendedSection].forEach(s => s.classList.add("hidden"));
   section.classList.remove("hidden");
 }
+
+const openAdminBtn = document.getElementById("redirectToAdmin");
+
+openAdminBtn.addEventListener("click", () => {
+    window.open("http://localhost:5503", "_blank");
+});
 
 // ---------- AUTH ----------
 const tabButtons = document.querySelectorAll(".tab-btn");
@@ -204,7 +212,7 @@ function renderNews(results) {
             <span>${item.likes ?? 0}</span>
           </button>
     
-            <button class="action-btn comment-btn" onclick="toggleComments('${item.news_id}')">
+            <button class="action-btn comment-btn" id="comment-btn-${item.news_id}"  onclick="toggleComments('${item.news_id}')">
                 <i class="bi bi-chat-left-text"></i>
                 <span id="comment-count-${item.news_id}"></span>
             </button>
@@ -817,7 +825,7 @@ async function loadBookmarked() {
 
     list.innerHTML += `
       <div class="news-item">
-        <h4>${news.title}</h4>
+        <a href="${news.url}" target="_blank"><h4>${news.title}</h4></a>
       </div>
     `;
   }
@@ -950,7 +958,7 @@ profileBtn.onclick = () => { loadProfile(); showSection(profileSection); };
 bookmarksBtn.onclick = () => { loadBookmarked(); showSection(bookmarksSection); };
 activityBtn.onclick = () => { loadUserActivity(); showSection(activitySection); };
 logoutBtn.onclick = async () => {
-  await fetch(`${baseURL}/auth/logout`, {
+  await fetch(`${baseURL}/auth/logoutUser`, {
     method: "POST",
     credentials: "include"
   });
@@ -959,26 +967,78 @@ logoutBtn.onclick = async () => {
   await checkLogin();
 };
 
+suspendedLogoutBtn.onclick = async () => {
+    await fetch(`${baseURL}/auth/logout`, {
+        method: "POST",
+        credentials: "include"
+    });
+
+    // This will hide nav + show login section automatically
+    await checkLogin();
+}
+
 
 async function checkLogin() {
-  const nav = document.getElementById("mainNav");
+    const nav = document.getElementById("mainNav");
 
-  const res = await fetch(`${baseURL}/auth/verify`, {
-    credentials: "include",
-  });
+    try {
+        // STEP 1: Verify login status
+        const res = await fetch(`${baseURL}/auth/verify`, {
+            credentials: "include",
+        });
 
-  if (res.ok) {
-    const data = await res.json();
-    if (data.loggedIn) {
-      nav.style.display = "flex";
-      await loadNews();
-      showSection(newsSection);
-      return;
+        if (!res.ok) {
+            nav.style.display = "none";
+            showSection(authSection);
+            return;
+        }
+
+        const data = await res.json();
+
+        if (!data.loggedIn) {
+            nav.style.display = "none";
+            showSection(authSection);
+            return;
+        }
+
+        // STEP 2: User is logged in → check suspension
+        const statusRes = await fetch(`${baseURL}/auth/checkStatus`, {
+            credentials: "include",
+        });
+
+        if (!statusRes.ok) {
+            console.warn("Unable to fetch status");
+            nav.style.display = "none";
+            showSection(authSection);
+            return;
+        }
+
+        const statusData = await statusRes.json();
+        console.log("Account status:", statusData.status);
+        // STEP 3: If suspended
+        if (statusData.status === "suspended" || statusData.status === "deleted") {
+            nav.style.display = "none";
+
+            if (suspendedSection) {
+                showSection(suspendedSection);
+            } else {
+                alert("Your account is suspended.");
+            }
+
+            return;
+        }
+
+        // STEP 4: If active → allow access
+        nav.style.display = "flex";
+        await loadNews();
+        showSection(newsSection);
+
+    } catch (err) {
+        console.error("Login check error:", err);
+        nav.style.display = "none";
+        showSection(authSection);
     }
-  }
-
-  nav.style.display = "none";
-  showSection(authSection);
 }
+
 
 checkLogin();
