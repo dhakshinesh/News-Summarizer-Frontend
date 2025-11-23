@@ -214,17 +214,28 @@ async function loadDashboard() {
             : null;
         console.log("Dashboard recent activities:", activities);
         recentEl.innerHTML = "";
+        function formatActivity(it) {
+            switch(it.action) {
+                case "auth.login":
+                    return `${it.username} logged in at ${new Date(it.createdAt).toLocaleString()}`;
+                case "comment.delete":
+                    return `${it.username} deleted a comment on news ${it.news_id} at ${new Date(it.createdAt).toLocaleString()}`;
+                default:
+                    return `${it.username} performed ${it.action}`;
+            }
+        }
 
-        if (activities && activities.activity?.length) {
-            activities.activity.slice(0, 6).forEach(it => {
+        if (activities && activities.activities?.length) {
+            activities.activities.slice(0, 6).forEach(it => {
                 const div = document.createElement("div");
                 div.className = "activity-item";
-                div.textContent = `${it.username} - ${it.news_id} - comments:${it.comments?.length || 0}`;
+                div.textContent = formatActivity(it);
                 recentEl.appendChild(div);
             });
         } else {
             recentEl.textContent = "No recent activity.";
         }
+
     } catch (err) {
         console.error("loadDashboard error:", err);
     }
